@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Découvrez nos salles disponibles</h1>
+    <div>
+        <strong>Filtrer par :</strong>
+        <a href="{% url 'liste_salles' %}">Toutes</a> |
+        <a href="{% url 'liste_salles' %}?categorie=H">Hommes</a> |
+        <a href="{% url 'liste_salles' %}?categorie=F">Femmes</a>
+    </div>
+    <hr>
+    
+    <div class="card-container">
+        {% for salle in salles %}
+            <div class="card">
+                <h2><a href="{% url 'detail_salle' salle.id %}">{{ salle.nom }}</a></h2>
+                <p><strong>Catégorie :</strong> {{ salle.get_categorie_display }}</p>
+                <p><strong>Capacité :</strong> {{ salle.capacite }} personnes</p>
+                <p><strong>Prix :</strong> {{ salle.prix_par_heure }} € / heure</p>
+            </div>
+        {% empty %}
+            <p>Désolé, aucune salle n'est disponible pour le moment.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

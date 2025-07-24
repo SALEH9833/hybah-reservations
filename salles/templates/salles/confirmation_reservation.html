@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Demande reçue</title>
+</head>
+<body>
+    <h1>Votre demande de réservation a bien été lancée !</h1>
+    <p><strong>Salle :</strong> {{ salle.nom }}</p>
+    <p><strong>Date :</strong> {{ date }}</p>
+    <p><strong>Durée :</strong> {{ duree }} heures</p>
+
+    <hr>
+    <p><strong>IMPORTANT :</strong> Votre réservation sera automatiquement annulée dans 30 minutes si vous ne la confirmez pas.</p>
+    <hr>
+
+    <a href="{% url 'liste_salles' %}">Voir d'autres salles</a><br>
+    <a href="{% url 'accueil' %}">Retour à l'accueil</a>
+</body>
+</html>

@@ -1,0 +1,210 @@
+/* static/style.css */
+
+/* Style général du corps de la page */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+/* Barre de navigation */
+.navbar {
+    background-color: #333;
+    overflow: hidden;
+    padding: 14px 20px;
+}
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 14px 20px;
+}
+.navbar a:hover {
+    background-color: #575757;
+}
+.nav-right {
+    float: right;
+}
+
+/* Contenu principal de la page */
+.container {
+    padding: 20px;
+}
+
+/* Style pour les listes de cartes (salles, gâteaux) */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: white;
+    width: 300px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+.card h2 {
+    margin-top: 0;
+}
+/* static/style.css */
+/* ... (gardez tout le CSS existant) ... */
+
+/* Style pour que le bouton de déconnexion ressemble à un lien */
+.nav-button {
+    background: none;
+    border: none;
+    color: white;
+    padding: 14px 20px;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    display: inline;
+}
+.nav-button:hover {
+    background-color: #575757;
+}
+/* static/style.css */
+/* ... (gardez tout le CSS que vous avez déjà) ... */
+
+/* Amélioration des cartes */
+.card {
+    transition: transform 0.2s, box-shadow 0.2s; /* Ajoute une petite animation */
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Fait "flotter" la carte au survol */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.card h2 a {
+    text-decoration: none;
+    color: #333;
+}
+
+/* Style pour les formulaires */
+form {
+    margin-top: 20px;
+}
+
+form p {
+    margin-bottom: 10px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="number"],
+input[type="email"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Important pour que le padding n'augmente pas la largeur */
+}
+
+button {
+    background-color: #333;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #575757;
+}
+.disponibilite {
+    background-color: #e7f3fe;
+    border-left: 6px solid #2196F3;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+}
+/* static/style.css */
+/* ... (gardez tout le CSS existant) ... */
+
+
+/* --- NOUVEAUX STYLES POUR LA PAGE DE CONNEXION --- */
+
+/* Un conteneur pour centrer le formulaire verticalement et horizontalement */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* Prend 80% de la hauteur de la vue */
+}
+
+/* La "carte" blanche qui contient le formulaire */
+.auth-card {
+    background-color: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Largeur maximale du formulaire */
+    text-align: center; /* Centre le texte et les éléments à l'intérieur */
+}
+
+.auth-card h2 {
+    margin-top: 0;
+    margin-bottom: 30px;
+    font-size: 24px;
+}
+
+/* Style pour les champs de formulaire */
+.auth-card input {
+    background-color: #f2f2f2;
+    border: none;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+/* Style pour le bouton principal */
+.auth-card .btn-primary {
+    background-color: #d92344; /* Un rouge similaire à l'exemple */
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.auth-card .btn-primary:hover {
+    background-color: #b01d37;
+}
+
+/* Style pour le lien "Pas de compte ?" en bas */
+.auth-switch-link {
+    margin-top: 25px;
+    font-size: 14px;
+}
+
+.auth-switch-link a {
+    color: #d92344;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.auth-switch-link a:hover {
+    text-decoration: underline;
+}
+.helptext {
+    display: none; /* On dit simplement au navigateur de ne pas l'afficher */
+}
+
+/* Pour le formulaire d'inscription, les listes de validation du mot de passe */
+form ul {
+    display: none;
+}

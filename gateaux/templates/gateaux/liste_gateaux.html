@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Commandez votre gâteau</h1>
+    
+    <div class="card-container">
+        {% for gateau in gateaux %}
+            <div class="card">
+                <h2>{{ gateau.nom }}</h2>
+                {% if gateau.photo %}
+                    <img src="{{ gateau.photo.url }}" alt="Photo de {{ gateau.nom }}">
+                {% endif %}
+                <p><strong>Prix :</strong> {{ gateau.prix }} €</p>
+            </div>
+        {% empty %}
+            <p>Désolé, aucun gâteau n'est disponible pour le moment.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

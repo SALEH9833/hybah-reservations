@@ -1,0 +1,22 @@
+<!-- comptes/templates/comptes/inscription.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+
+        <h2>Créez votre compte</h2>
+        
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }} <!-- Pour l'inscription, as_p est suffisant -->
+            <button type="submit" class="btn-primary">S'inscrire</button>
+        </form>
+
+        <div class="auth-switch-link">
+            <p>Déjà un compte ? <a href="{% url 'connexion' %}">Connectez-vous.</a></p>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

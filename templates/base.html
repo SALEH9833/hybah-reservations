@@ -1,0 +1,45 @@
+<!-- templates/base.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Hybah Réservations</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+    <!-- templates/base.html (Version Améliorée) -->
+<nav class="navbar">
+    <a href="{% url 'accueil' %}">Hybah</a>
+    
+    {% if user.is_authenticated %}
+        <!-- Liens pour les utilisateurs connectés -->
+        <a href="{% url 'liste_salles' %}">Salles</a>
+        <a href="{% url 'liste_gateaux' %}">Gâteaux</a>
+        
+        <div class="nav-right">
+            <a href="#">Mes Réservations</a>
+            <form action="{% url 'deconnexion' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="nav-button">Déconnexion ({{ user.username }})</button>
+            </form>
+        </div>
+
+    {% else %}
+        <!-- Liens pour les visiteurs non connectés -->
+        <div class="nav-right">
+            <a href="{% url 'connexion' %}">Connexion</a>
+            <a href="{% url 'inscription' %}">Inscription</a>
+        </div>
+    {% endif %}
+</nav>
+
+    <div class="container">
+        {% block content %}
+        <!-- Le contenu spécifique de chaque page viendra ici -->
+        {% endblock %}
+    </div>
+
+</body>
+</html>

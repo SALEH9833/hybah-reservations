@@ -1,0 +1,37 @@
+<!-- comptes/templates/comptes/connexion.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        
+        <!-- (Optionnel) Vous pouvez ajouter votre logo ici -->
+        <!-- <img src="URL_DE_VOTRE_LOGO" alt="Logo Hybah" width="150"> -->
+
+        <h2>Connexion</h2>
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <!-- On affiche les erreurs générales du formulaire en haut -->
+            {% if form.non_field_errors %}
+                <div style="color: red; margin-bottom: 15px;">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- On affiche les champs du formulaire -->
+            {{ form.username }}
+            {{ form.password }}
+            
+            <button type="submit" class="btn-primary">Se connecter</button>
+        </form>
+
+        <div class="auth-switch-link">
+            <p>Pas de compte ? <a href="{% url 'inscription' %}">Inscrivez-vous.</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

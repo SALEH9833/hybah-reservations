@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ salle.nom }}</title>
+</head>
+<body>
+    <a href="{% url 'liste_salles' %}">← Retour à la liste des salles</a>
+    <hr>
+    
+    <h1>Détails de la salle : {{ salle.nom }}</h1>
+    <p><strong>Catégorie :</strong> {{ salle.get_categorie_display }}</p>
+    <p><strong>Description :</strong> {{ salle.description }}</p>
+    <p><strong>Capacité :</strong> {{ salle.capacite }} personnes</p>
+    <p><strong>Prix :</strong> <span id="prix-par-heure">{{ salle.prix_par_heure }}</span> € / heure</p>
+    
+    <hr>
+    
+    <h2>Réserver cette salle</h2>
+    <!-- NOUVEAU BLOC D'INFORMATION SUR LA DISPONIBILITÉ -->
+<div class="disponibilite">
+    <h3>Dates déjà réservées :</h3>
+    {% if dates_reservees %}
+        <ul>
+        {% for date in dates_reservees %}
+            <li>{{ date|date:"d F Y" }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Cette salle est entièrement disponible pour les dates à venir !</p>
+    {% endif %}
+</div>
+<!-- FIN DU BLOC D'INFORMATION -->
+
+    <!-- Notre nouveau formulaire pointe vers la page actuelle (method="post") -->
+    <form method="post">
+        {% csrf_token %} <!-- Protection Django obligatoire -->
+        
+        <!-- Django va transformer notre objet 'form' en champs HTML -->
+        {{ form.as_p }}
+        
+        <hr>
+        <h3>Prix total estimé : <span id="prix-total">{{ salle.prix_par_heure }}</span> €</h3>
+        
+        <button type="submit">Lancer la demande de réservation</button>
+    </form>
+
+    <script>
+        // Ce script met à jour le prix total quand on change la durée
+        const prixParHeure = parseFloat(document.getElementById('prix-par-heure').textContent);
+        const dureeInput = document.getElementById('id_duree_heures');
+        const prixTotalSpan = document.getElementById('prix-total');
+
+        dureeInput.addEventListener('input', function() {
+            const duree = parseInt(this.value) || 0;
+            const total = duree * prixParHeure;
+            prixTotalSpan.textContent = total.toFixed(2); // .toFixed(2) pour afficher 2 décimales
+        });
+    </script>
+
+</body>
+</html>
