@@ -7,7 +7,7 @@ import json
 
 @admin.action(description="Marquer les réservations sélectionnées comme CONFIRMÉES")
 def marquer_comme_confirmee(modeladmin, request, queryset):
-    queryset.update(statut=Reservation.CONFIRMTEE)
+    queryset.update(statut=Reservation.CONFIRMEE)
     messages.success(request, "Les réservations sélectionnées ont été marquées comme confirmées.")
 
 @admin.action(description="Marquer les réservations sélectionnées comme ANNULÉES")
