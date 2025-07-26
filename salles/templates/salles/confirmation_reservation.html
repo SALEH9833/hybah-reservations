@@ -1,20 +1,36 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Demande reçue</title>
-</head>
-<body>
-    <h1>Votre demande de réservation a bien été lancée !</h1>
-    <p><strong>Salle :</strong> {{ salle.nom }}</p>
-    <p><strong>Date :</strong> {{ date }}</p>
-    <p><strong>Durée :</strong> {{ duree }} heures</p>
+<!-- salles/templates/salles/confirmation_reservation.html (Version Améliorée) -->
 
-    <hr>
-    <p><strong>IMPORTANT :</strong> Votre réservation sera automatiquement annulée dans 30 minutes si vous ne la confirmez pas.</p>
-    <hr>
+{% extends 'base.html' %}
 
-    <a href="{% url 'liste_salles' %}">Voir d'autres salles</a><br>
-    <a href="{% url 'accueil' %}">Retour à l'accueil</a>
-</body>
-</html>
+{% block content %}
+    <div class="confirmation-container">
+        <div class="confirmation-card">
+            <div class="confirmation-icon">
+                ✅
+            </div>
+            <h1>Votre demande de réservation a bien été lancée !</h1>
+            <p class="subtitle">
+                Vous allez recevoir une confirmation une fois que votre demande sera validée par notre équipe.
+            </p>
+            
+            <hr>
+
+            <div class="details">
+                <p><strong>Salle :</strong> {{ salle.nom }}</p>
+                <p><strong>Date :</strong> {{ date|date:"d F Y" }}</p>
+                <p><strong>Heure de début :</strong> {{ heure }}</p>
+                <p><strong>Durée :</strong> {{ duree }} heures</p>
+            </div>
+
+            <div class="warning-box">
+                <strong>IMPORTANT :</strong> Votre réservation sera automatiquement annulée dans 30 minutes si vous ne la confirmez pas (cette étape viendra plus tard).
+            </div>
+
+            <div class="actions">
+                <a href="{% url 'historique' %}"><button>Voir mes réservations</button></a>
+                <a href="{% url 'liste_salles' %}"><button class="btn-secondary">Réserver une autre salle</button></a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

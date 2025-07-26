@@ -6,14 +6,22 @@
     <div class="card-container">
         {% for gateau in gateaux %}
             <div class="card">
-                <h2>{{ gateau.nom }}</h2>
+                <h2><a href="{% url 'detail_gateau' gateau.id %}">{{ gateau.nom }}</a></h2>
                 {% if gateau.photo %}
-                    <img src="{{ gateau.photo.url }}" alt="Photo de {{ gateau.nom }}">
+                    <a href="{% url 'detail_gateau' gateau.id %}">
+                        <img src="{{ gateau.photo.url }}" alt="Photo de {{ gateau.nom }}">
+                    </a>
                 {% endif %}
                 <p><strong>Prix :</strong> {{ gateau.prix }} €</p>
+                <a href="{% url 'detail_gateau' gateau.id %}"><button style="width: 100%;">Choisir</button></a>
             </div>
         {% empty %}
             <p>Désolé, aucun gâteau n'est disponible pour le moment.</p>
         {% endfor %}
     </div>
+{% endblock %}
+
+
+{% block panier_chatbot %}
+    {% include 'partials/panier_chatbot.html' %}
 {% endblock %}

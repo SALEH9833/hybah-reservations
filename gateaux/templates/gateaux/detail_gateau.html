@@ -1,0 +1,81 @@
+<!-- gateaux/templates/gateaux/detail_gateau.html (Version Finale) -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <a href="{% url 'liste_gateaux' %}">← Retour à la liste des gâteaux</a>
+    <hr>
+
+    <h1>{{ gateau.nom }}</h1>
+
+    {% if gateau.photo %}
+        <img src="{{ gateau.photo.url }}" alt="Photo de {{ gateau.nom }}" width="400" style="border-radius: 8px;">
+    {% endif %}
+
+    <p><strong>Description :</strong> {{ gateau.description }}</p>
+    <p><strong>Prix :</strong> {{ gateau.prix }} €</p>
+
+    <hr>
+    
+    <h2>Commander ce gâteau</h2>
+    <form id="ajout-panier-form">
+        {% csrf_token %}
+        <button type="submit" class="btn-primary">Ajouter au Panier</button>
+    </form>
+    <div id="ajout-feedback" style="margin-top: 15px; font-weight: bold;"></div>
+
+    <script>
+document.getElementById('ajout-panier-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const gateauId = "{{ gateau.id }}";
+    const url = `/gateaux/ajouter-au-panier/${gateauId}/`;
+    const csrfToken = this.querySelector('[name=csrfmiddlewaretoken]').value;
+    const feedbackDiv = document.getElementById('ajout-feedback');
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken,
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('La réponse du serveur n\'est pas OK');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 'succes') {
+            feedbackDiv.textContent = data.message;
+            feedbackDiv.style.color = 'green';
+
+            if (typeof updatePanierDisplay === 'function') {
+                updatePanierDisplay();
+                
+                
+                const panierChatbot = document.getElementById('panier-chatbot');
+                if (panierChatbot && !panierChatbot.classList.contains('panier-visible')) {
+                    panierChatbot.classList.add('panier-visible');
+                    panierChatbot.classList.remove('panier-hidden'); // On s'assure qu'elle est bien visible
+                }
+            }
+
+        } else {
+            feedbackDiv.textContent = 'Une erreur est survenue lors de l\'ajout.';
+            feedbackDiv.style.color = 'red';
+        }
+    })
+    .catch(error => {
+        console.error('Erreur Fetch:', error);
+        feedbackDiv.textContent = 'Une erreur de communication est survenue.';
+        feedbackDiv.style.color = 'red';
+    });
+});
+</script>
+
+{% endblock %}
+{% block panier_chatbot %}
+    {% include 'partials/panier_chatbot.html' %}
+{% endblock %}

@@ -1,0 +1,22 @@
+<!-- templates/partials/panier_chatbot.html (Version Finale) -->
+<form id="csrf-form" style="display: none;">{% csrf_token %}</form>
+
+<div id="panier-chatbot" class="panier-hidden">
+    <div id="panier-header" onclick="togglePanier()">
+        🛒 Mon Panier (<span id="panier-count">0</span>)
+    </div>
+    <div id="panier-body">
+        <div id="panier-items"><p>Votre panier est vide.</p></div>
+        <hr>
+        <strong>Total : <span id="panier-total">0.00</span> €</strong>
+        <a href="{% url 'recapitulatif_commande' %}"><button class="btn-panier">Passer la commande</button></a>
+    </div>
+</div>
+
+<style>
+    #panier-chatbot{position:fixed;bottom:20px;right:20px;width:320px;background-color:#fff;border-radius:15px;box-shadow:0 4px 20px rgba(0,0,0,.2);transition:transform .3s ease-in-out;z-index:1000}#panier-header{background-color:#333;color:#fff;padding:15px;border-top-left-radius:15px;border-top-right-radius:15px;cursor:pointer;font-weight:700}#panier-body{padding:15px;max-height:400px;overflow-y:auto}.panier-hidden{transform:translateY(calc(100% - 55px))}.panier-visible{transform:translateY(0)}.btn-panier{width:100%;margin-top:10px;background-color:#d92344}.panier-item{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:14px}.retirer-btn{background:0 0;border:none;color:red;cursor:pointer;font-weight:700;margin-left:10px;padding:5px}
+</style>
+
+<script>
+    function updatePanierDisplay(){fetch("{% url 'vue_panier' %}").then(e=>e.json()).then(e=>{const t=document.getElementById("panier-items"),n=document.getElementById("panier-count"),o=document.getElementById("panier-total");if(t.innerHTML="",e.items&&e.items.length>0)e.items.forEach(n=>{const o=document.createElement("div");o.classList.add("panier-item"),o.innerHTML=`<span>${n.quantite} x ${n.nom}</span> <span> ${parseFloat(n.prix_total).toFixed(2)} € <button class="retirer-btn" data-gateau-id="${n.id}">X</button> </span>`,t.appendChild(o)});else t.innerHTML="<p>Votre panier est vide.</p>";n.textContent=e.total_items||0,o.textContent=parseFloat(e.total_prix||0).toFixed(2)})}function retirerDuPanier(e){const t=document.querySelector("#csrf-form [name=csrfmiddlewaretoken]").value;fetch(`/gateaux/retirer-du-panier/${e}/`,{method:"POST",headers:{"X-CSRFToken":t,"Content-Type":"application/json"}}).then(e=>e.json()).then(e=>{e.status==="succes"&&updatePanierDisplay()})}document.getElementById("panier-items")&&document.getElementById("panier-items").addEventListener("click",function(e){e.target&&e.target.classList.contains("retirer-btn")&&retirerDuPanier(e.target.dataset.gateauId)}),updatePanierDisplay();
+</script>

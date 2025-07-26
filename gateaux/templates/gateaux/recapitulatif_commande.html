@@ -1,0 +1,54 @@
+<!-- gateaux/templates/gateaux/recapitulatif_commande.html (Version Finale et Propre) -->
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Récapitulatif de votre commande</h1>
+
+    {% if items %}
+        <table class="table-historique">
+            <thead>
+                <tr>
+                    <th>Article</th>
+                    <th>Quantité</th>
+                    <th>Prix Unitaire</th>
+                    <th>Prix Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                    <tr>
+                        <td>
+                            {% if item.photo_url %}
+                                <img src="{{ item.photo_url }}" width="50" style="vertical-align: middle; margin-right: 10px; border-radius: 4px;">
+                            {% endif %}
+                            {{ item.nom }}
+                        </td>
+                        <td>{{ item.quantite }}</td>
+                        <td>{{ item.prix_unitaire }} €</td>
+                        <td>{{ item.prix_total }} €</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" style="text-align: right; font-weight: bold; border-top: 2px solid #333;">TOTAL À PAYER</td>
+                    <td style="font-weight: bold; border-top: 2px solid #333;">{{ total_prix }} €</td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <div style="text-align: right; margin-top: 20px;">
+            <form action="{% url 'recapitulatif_commande' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn-primary">Confirmer ma commande</button>
+            </form>
+        </div>
+
+    {% else %}
+        <p>Votre panier est vide. <a href="{% url 'liste_gateaux' %}">Continuez vos achats.</a></p>
+    {% endif %}
+
+    <!-- On ajoute un espace en bas pour ne pas que le bouton soit caché par le panier -->
+    <div style="height: 150px;"></div>
+
+{% endblock %}

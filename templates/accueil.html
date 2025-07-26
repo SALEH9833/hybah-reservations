@@ -1,6 +1,25 @@
+<!-- templates/accueil.html -->
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Bienvenue sur votre application de réservation !</h1>
-    <p>Utilisez la navigation pour découvrir nos offres.</p>
+
+<div class="hero-section">
+    <div class="hero-content">
+        {% if user.is_authenticated %}
+            <h1>Bienvenue, {{ user.username }} !</h1>
+            <p>Prêt à organiser votre prochain événement ?</p>
+        {% else %}
+            <h1>Bienvenue à HYBAH COFFEE HOUSE </h1>
+            <h2>La Salle Parfaite pour Chaque Occasion</h2>
+            <p>Réservez nos salles et commandez nos gâteaux en quelques clics.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Vous pouvez ajouter plus de contenu ici, en dessous de l'image -->
+<div style="padding: 40px 20px; text-align: center;">
+    <h2>Découvrez nos services</h2>
+    <p>Nous offrons des espaces élégants et des pâtisseries sur mesure.</p>
+</div>
+
 {% endblock %}

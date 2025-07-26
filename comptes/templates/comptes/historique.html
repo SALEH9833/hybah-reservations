@@ -1,0 +1,77 @@
+<!-- comptes/templates/comptes/historique.html (Version Finale et Polyvalente) -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Mon Historique des Commandes et Réservations</h1>
+
+    {% if reservations %}
+        <table class="table-historique">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Détails de l'Article</th>
+                    <th>Date / Heure</th>
+                    <th>Prix Total</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resa in reservations %}
+                    <tr>
+                        <!-- Affiche "Réservation de Salle" ou "Commande de Gâteau" -->
+                        <td>{{ resa.get_type_reservation_display }}</td> 
+                        
+                        <td>
+                            <!-- Si c'est une réservation de SALLE, on affiche le nom de la salle -->
+                            {% if resa.type_reservation == 'SALLE' %}
+                                {% if resa.salle %}
+                                    <strong>{{ resa.salle.nom }}</strong>
+                                {% else %}
+                                    <span style="color: red;">Salle Supprimée</span>
+                                {% endif %}
+                            
+                            <!-- Si c'est une commande de GÂTEAU, on affiche la liste des gâteaux -->
+                            {% elif resa.type_reservation == 'GATEAU' %}
+                                {% if resa.gateau_details %}
+                                    <ul style="margin: 0; padding-left: 20px;">
+                                        {% for item in resa.gateau_details %}
+                                            <li>{{ item.quantite }} x {{ item.nom }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    Détails non disponibles
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        
+                        <td>
+                            <!-- Affiche la date et l'heure uniquement pour les salles -->
+                            {% if resa.type_reservation == 'SALLE' %}
+                                {% if resa.date_reservation %}{{ resa.date_reservation|date:"d F Y" }}{% endif %}
+                                {% if resa.heure_debut %}<br>à {{ resa.heure_debut|time:"H:i" }}{% endif %}
+                            {% else %}
+                                Commande directe
+                            {% endif %}
+                        </td>
+                        
+                        <td><strong>{{ resa.prix_total }} €</strong></td>
+                        
+                        <td>{{ resa.get_statut_display }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Vous n'avez encore passé aucune commande ou réservation.</p>
+    {% endif %}
+
+    <br>
+    <a href="{% url 'liste_salles' %}">
+        <button>Réserver une Salle</button>
+    </a>
+    <a href="{% url 'liste_gateaux' %}">
+        <button>Commander un Gâteau</button>
+    </a>
+
+{% endblock %}

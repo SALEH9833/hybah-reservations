@@ -12,4 +12,5 @@ urlpatterns = [
 
     # Le chemin pour la déconnexion
     path('deconnexion/', auth_views.LogoutView.as_view(), name='deconnexion'),
+      path('historique/', views.historique_reservations, name='historique'),
 ]
