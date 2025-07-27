@@ -1,0 +1,51 @@
+<!-- core/templates/core/contact.html (Version avec vos informations) -->
+{% extends 'base.html' %}
+
+{% block content %}
+    <style>
+        /* Styles spécifiques pour améliorer la page de contact */
+        .contact-info {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+        .contact-info p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        .contact-info a {
+            text-decoration: underline;
+            font-weight: 500;
+        }
+    </style>
+
+    <div style="text-align: center;">
+        <h1>Contactez-nous</h1>
+        <p class="text-muted">Pour toute question ou demande d'information, n'hésitez pas à nous joindre.</p>
+    </div>
+    
+    <div class="contact-info">
+        <h3>Hybah Coffee House</h3>
+        <p>
+            <strong>Adresse :</strong> >
+            <a href="https://www.google.com/maps/search/?api=1&query=43H7%2B98R,%20N'Djamena" target="_blank" rel="noopener noreferrer">
+                43H7+98R, Boulevard du President N'Garta Tombalbaye, N'Djamena, Tchad
+            </a>
+        </p>
+        <p>
+            <strong>Téléphone :</strong> 
+            <a href="tel:+23562003284">
+                +235 62 00 32 84
+            </a>
+        </p>
+        <p>
+            <strong>E-mail :</strong> 
+            <a href="mailto:khalilissam0@yahoo.fr">
+                khalilissam0@yahoo.fr
+            </a>
+        </p>
+    </div>
+{% endblock %}

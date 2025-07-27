@@ -1,29 +1,28 @@
+<!-- gateaux/templates/gateaux/liste_gateaux.html (Nouveau Design) -->
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
     <h1>Commandez votre gâteau</h1>
     
-    <div class="row">
+    <div class="menu-grid" style="margin-top: 2rem;">
         {% for gateau in gateaux %}
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    {% if gateau.photo %}
-                        <a href="{% url 'detail_gateau' gateau.id %}">
-                           <img src="{{ gateau.photo.url }}" class="card-img-top" alt="{{ gateau.nom }}" style="height: 200px; object-fit: cover;">
-                        </a>
-                    {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title"><a href="{% url 'detail_gateau' gateau.id %}" class="text-dark text-decoration-none">{{ gateau.nom }}</a></h5>
-                        <p class="card-text">{{ gateau.description|truncatewords:15 }}</p>
-                    </div>
-                     <div class="card-footer text-muted">
-                        <strong>{{ gateau.prix }} €</strong>
-                        <a href="{% url 'detail_gateau' gateau.id %}" class="btn btn-dark btn-sm float-end">Choisir</a>
-                    </div>
+            <a href="{% url 'detail_gateau' gateau.id %}" class="product-card" style="text-decoration: none; color: inherit;">
+                {% if gateau.photo %}
+                    <img src="{{ gateau.photo.url }}" alt="{{ gateau.nom }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/400x300.png?text=Image+Indisponible" alt="Image indisponible">
+                {% endif %}
+                <div class="product-card-body">
+                    <h3>{{ gateau.nom }}</h3>
+                    <p>{{ gateau.prix }} €</p>
                 </div>
-            </div>
+            </a>
         {% empty %}
-            <p>Désolé, aucun gâteau n'est disponible pour le moment.</p>
+            <div class="empty-cart" style="grid-column: 1 / -1;">
+                <h3>Aucun gâteau disponible</h3>
+                <p>Notre menu est en cours de préparation. Revenez bientôt !</p>
+            </div>
         {% endfor %}
     </div>
 {% endblock %}

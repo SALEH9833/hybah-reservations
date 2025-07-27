@@ -1,43 +1,31 @@
-<!-- salles/templates/salles/liste_salles.html (Version Corrigée avec Image) -->
+<!-- salles/templates/salles/liste_salles.html (Nouveau Design) -->
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-    <h1>Découvrez nos salles disponibles</h1>
-    
-    <div class="mb-3">
-        <strong>Filtrer :</strong>
-        <a href="{% url 'liste_salles' %}" class="btn btn-outline-secondary btn-sm">Toutes</a>
-        <a href="{% url 'liste_salles' %}?categorie=H" class="btn btn-outline-primary btn-sm">Hommes</a>
-        <a href="{% url 'liste_salles' %}?categorie=F" class="btn btn-outline-danger btn-sm">Femmes</a>
+    <div class="menu-tabs">
+        <a href="{% url 'liste_salles' %}" {% if not request.GET.categorie %}class="active"{% endif %}>Toutes les salles</a>
+        <a href="{% url 'liste_salles' %}?categorie=H" {% if request.GET.categorie == 'H' %}class="active"{% endif %}>Salles Hommes</a>
+        <a href="{% url 'liste_salles' %}?categorie=F" {% if request.GET.categorie == 'F' %}class="active"{% endif %}>Salles Femmes</a>
     </div>
-    
-    <div class="row">
+
+    <div class="menu-grid">
         {% for salle in salles %}
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    
-                    <!-- ======================================== -->
-                    <!--     LE BLOC D'IMAGE AJOUTÉ EST ICI      -->
-                    <!-- ======================================== -->
-                    {% if salle.photo %}
-                        <a href="{% url 'detail_salle' salle.id %}">
-                           <!-- On utilise la classe 'card-img-top' de Bootstrap -->
-                           <img src="{{ salle.photo.url }}" class="card-img-top" alt="{{ salle.nom }}" style="height: 200px; object-fit: cover;">
-                        </a>
-                    {% endif %}
-                    
-                    <div class="card-body">
-                        <h5 class="card-title"><a href="{% url 'detail_salle' salle.id %}" class="text-dark text-decoration-none">{{ salle.nom }}</a></h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{{ salle.get_categorie_display }}</h6>
-                        <p class="card-text">{{ salle.description|truncatewords:15 }}</p>
-                    </div>
-                    <div class="card-footer text-muted">
-                        Capacité : {{ salle.capacite }} | {{ salle.prix_par_heure }} € / heure
-                    </div>
-                </div>
-            </div>
+            <a href="{% url 'detail_salle' salle.id %}" class="product-card" style="text-decoration: none; color: inherit;">
+                {% if salle.photo %}
+                    <img src="{{ salle.photo.url }}" alt="Photo de {{ salle.nom }}">
+                {% else %}
+                    <!-- Image de remplacement si pas de photo -->
+                    <img src="https://via.placeholder.com/300x300.png?text=Image+Indisponible" alt="Image indisponible">
+                {% endif %}
+                <h3>{{ salle.nom }}</h3>
+                <p>Capacité : {{ salle.capacite }} personnes</p>
+            </a>
         {% empty %}
-            <p>Désolé, aucune salle n'est disponible pour le moment.</p>
+            <div class="empty-cart" style="grid-column: 1 / -1;"> <!-- Prend toute la largeur de la grille -->
+                <h3>Aucune salle disponible</h3>
+                <p>Il n'y a actuellement aucune salle correspondant à ce critère.</p>
+            </div>
         {% endfor %}
     </div>
 {% endblock %}

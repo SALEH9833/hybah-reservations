@@ -1,36 +1,26 @@
-<!-- salles/templates/salles/confirmation_reservation.html (Version Améliorée) -->
-
+<!-- salles/templates/salles/confirmation_reservation.html (Nouveau Design) -->
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="confirmation-container">
-        <div class="confirmation-card">
-            <div class="confirmation-icon">
-                ✅
-            </div>
-            <h1>Votre demande de réservation a bien été lancée !</h1>
-            <p class="subtitle">
-                Vous allez recevoir une confirmation une fois que votre demande sera validée par notre équipe.
-            </p>
-            
-            <hr>
+<div class="form-container text-center">
+    <div style="font-size: 3rem; color: #28a745;">✓</div>
+    
+    <h2>Votre demande de réservation a bien été lancée !</h2>
+    <p class="text-muted mb-4">
+        Vous allez recevoir une confirmation une fois que votre demande sera validée par notre équipe.
+    </p>
 
-            <div class="details">
-                <p><strong>Salle :</strong> {{ salle.nom }}</p>
-                <p><strong>Date :</strong> {{ date|date:"d F Y" }}</p>
-                <p><strong>Heure de début :</strong> {{ heure }}</p>
-                <p><strong>Durée :</strong> {{ duree }} heures</p>
-            </div>
-
-            <div class="warning-box">
-                <strong>IMPORTANT :</strong> Votre réservation sera automatiquement annulée dans 30 minutes si vous ne la confirmez pas (cette étape viendra plus tard).
-            </div>
-
-            <div class="actions">
-                <a href="{% url 'historique' %}"><button>Voir mes réservations</button></a>
-                <a href="{% url 'liste_salles' %}"><button class="btn-secondary">Réserver une autre salle</button></a>
-            </div>
-        </div>
+    <div style="text-align: left; padding: 1.5rem; background-color: var(--light-gray-color); border-radius: 0.75rem; margin-bottom: 2rem;">
+        <h5 class="mb-3">Détails de votre demande :</h5>
+        <p><strong>Salle :</strong> {{ salle.nom }}</p>
+        <p><strong>Date :</strong> {{ date|date:"d F Y" }}</p>
+        <p><strong>Heure de début :</strong> {{ heure }}</p>
+        <p><strong>Durée :</strong> {{ duree }} heures</p>
     </div>
 
+    <div class="d-flex justify-content-center gap-3">
+        <a href="{% url 'historique' %}" class="btn btn-secondary">Voir mes réservations</a>
+        <a href="{% url 'liste_salles' %}" class="btn btn-primary">Réserver une autre salle</a>
+    </div>
+</div>
 {% endblock %}

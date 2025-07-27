@@ -1,109 +1,52 @@
-<!-- comptes/templates/comptes/historique.html (Version Finale Corrigée) -->
+<!-- comptes/templates/comptes/historique.html (Nouveau Design) -->
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Mon Historique des Commandes et Réservations</h1>
-
-    <!-- Ce petit formulaire caché est essentiel pour que le JavaScript puisse trouver le CSRF token -->
-    <form style="display:none;">{% csrf_token %}</form>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1>Mes Commandes et Réservations</h1>
+        <div>
+            <a href="{% url 'liste_gateaux' %}" class="btn btn-secondary">Commander un Gâteau</a>
+            <a href="{% url 'liste_salles' %}" class="btn btn-primary">Réserver une Salle</a>
+        </div>
+    </div>
 
     {% if reservations %}
-        <table class="table-historique">
-            <thead>
-                <tr>
-                    <th>Type</th>
-                    <th>Détails</th>
-                    <th>Date / Heure</th>
-                    <th>Prix Total</th>
-                    <th>Statut</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for resa in reservations %}
-                    <tr id="resa-row-{{ resa.id }}">
-                        <td>{{ resa.get_type_reservation_display }}</td>
-                        
-                        <td>
+        <div class="list-group">
+            {% for resa in reservations %}
+                <div class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">
                             {% if resa.type_reservation == 'SALLE' %}
-                                {% if resa.salle %}<strong>{{ resa.salle.nom }}</strong>{% else %}<span style="color: red;">Salle Supprimée</span>{% endif %}
+                                Réservation de Salle : <strong>{{ resa.salle.nom }}</strong>
                             {% elif resa.type_reservation == 'GATEAU' %}
-                                {% if resa.gateau_details %}
-                                    <ul style="margin: 0; padding-left: 20px;">
-                                        {% for item in resa.gateau_details %}
-                                            <li>{{ item.quantite }} x {{ item.nom }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                {% else %}
-                                    Détails non disponibles
-                                {% endif %}
+                                Commande de Gâteau(x)
                             {% endif %}
-                        </td>
-                        
-                        <td>
-                            {% if resa.type_reservation == 'SALLE' %}
-                                {% if resa.date_reservation %}{{ resa.date_reservation|date:"d F Y" }}{% endif %}
-                                {% if resa.heure_debut %}<br>à {{ resa.heure_debut|time:"H:i" }}{% endif %}
-                            {% else %}
-                                Commande directe
-                            {% endif %}
-                        </td>
-                        
-                        <td><strong>{{ resa.prix_total }} €</strong></td>
-                        
-                        <td>{{ resa.get_statut_display }}</td>
-                        
-                        <td>
-                            <button class="btn-danger" onclick="supprimerReservation({{ resa.id }})">
-                                Supprimer
-                            </button>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                        </h5>
+                        <small class="text-muted">{{ resa.horodatage_creation|date:"d M Y" }}</small>
+                    </div>
+                    
+                    <p class="mb-1">
+                        {% if resa.type_reservation == 'SALLE' %}
+                            Pour le {{ resa.date_reservation|date:"d F Y" }} à {{ resa.heure_debut|time:"H:i" }} (Durée: {{ resa.duree_heures }}h)
+                        {% elif resa.type_reservation == 'GATEAU' and resa.gateau_details %}
+                            Contenu : 
+                            {% for item in resa.gateau_details %}
+                                {{ item.quantite }}x {{ item.nom }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </p>
+                    
+                    <div class="d-flex w-100 justify-content-between align-items-center mt-2">
+                        <span class="badge {{ resa.statut|lower }}">{{ resa.get_statut_display }}</span>
+                        <strong>Total : {{ resa.prix_total }} €</strong>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     {% else %}
-        <p>Vous n'avez encore passé aucune commande ou réservation.</p>
+        <div class="empty-cart">
+            <h3>Aucun historique</h3>
+            <p>Vous n'avez encore passé aucune commande ou réservation.</p>
+        </div>
     {% endif %}
-
-    <br>
-    <a href="{% url 'liste_salles' %}"><button>Réserver une Salle</button></a>
-    <a href="{% url 'liste_gateaux' %}"><button>Commander un Gâteau</button></a>
-
-
-    <!-- ======================================== -->
-    <!--     SCRIPT POUR LA SUPPRESSION           -->
-    <!-- ======================================== -->
-    <script>
-    function supprimerReservation(reservationId) {
-        if (!confirm("Êtes-vous sûr de vouloir supprimer cette ligne de votre historique ?")) {
-            return; 
-        }
-
-        const url = `/comptes/historique/supprimer/${reservationId}/`;
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value; 
-
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrfToken,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'succes') {
-                const row = document.getElementById(`resa-row-${reservationId}`);
-                if (row) {
-                    row.style.transition = 'opacity 0.5s ease-out';
-                    row.style.opacity = '0';
-                    setTimeout(() => row.remove(), 500);
-                }
-            } else {
-                alert('Erreur: ' + data.message);
-            }
-        });
-    }
-    </script>
-
 {% endblock %}

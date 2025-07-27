@@ -1,152 +1,58 @@
-<!-- salles/templates/salles/detail_salle.html (Version Améliorée et Autonome) -->
-
+<!-- salles/templates/salles/detail_salle.html (Nouveau Design) -->
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
+<div class="form-container">
+    <h2>Réserver la salle : {{ salle.nom }}</h2>
+    <p style="color: var(--text-muted-color);">Veuillez remplir les informations ci-dessous pour lancer votre demande.</p>
 
-    <style>
-        /* Styles spécifiques pour cette page, pour garantir l'affichage */
-        .detail-container {
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
-        .info-col, .reservation-col {
-            flex: 1;
-            min-width: 300px;
-        }
-        .reservation-card {
-            background-color: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border: 1px solid #e0e0e0;
-        }
-        .reservation-card h2 {
-            margin-top: 0;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #555;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-        .prix-display {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-            margin: 20px 0;
-            text-align: center;
-        }
-        .disponibilite-info {
-            background-color: #e7f3fe;
-            border-left: 6px solid #2196F3;
-            padding: 10px 20px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-        }
-        .form-errors {
-            color: #d92344;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-    </style>
+    <form method="post" style="text-align: left; background-color: transparent; border: none; box-shadow: none; padding: 0;">
+        {% csrf_token %}
 
-    <a href="{% url 'liste_salles' %}">← Retour à la liste des salles</a>
-    <hr>
-
-    <div class="detail-container">
-        
-        <!-- Colonne de gauche : Informations sur la salle -->
-        <div class="info-col">
-             {% if salle.photo %}
-                <img src="{{ salle.photo.url }}" alt="Photo de {{ salle.nom }}" style="width: 100%; border-radius: 8px; margin-bottom: 20px;">
-            {% endif %}
-            <h1>{{ salle.nom }}</h1>
-            <p><strong>Catégorie :</strong> {{ salle.get_categorie_display }}</p>
-            <p><strong>Description :</strong> {{ salle.description }}</p>
-            <p><strong>Capacité :</strong> {{ salle.capacite }} personnes</p>
-            <p><strong>Prix :</strong> <span id="prix-par-heure-data" data-prix="{{ salle.prix_par_heure }}">{{ salle.prix_par_heure }}</span> € / heure</p>
+        <div class="form-group">
+            <label for="{{ form.date_reservation.id_for_label }}">Date</label>
+            {{ form.date_reservation }}
         </div>
+        <div class="form-group">
+            <label for="{{ form.heure_debut.id_for_label }}">Heure</label>
+            {{ form.heure_debut }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.duree_heures.id_for_label }}">Durée (en heures)</label>
+            {{ form.duree_heures }}
+        </div>
+        
+        <!-- On pourrait ajouter un champ pour le nombre de personnes ici si on le voulait -->
 
-        <!-- Colonne de droite : Carte de réservation -->
-        <div class="reservation-col">
-            <div class="reservation-card">
-                <h2>Réserver cette salle</h2>
-                
-              <div class="disponibilite-info">
-    <strong>Créneaux déjà confirmés :</strong>
-    {% if creneaux_reserves %}
-        <ul>
-        {% for date, heures in creneaux_reserves.items %}
-            <li>
-                <!-- Affiche la date, puis la liste des heures -->
-                <strong>{{ date }}:</strong> {% for heure in heures|slice:":3" %}{{ heure }}{% if not forloop.last %}, {% endif %}{% endfor %}{% if heures|length > 3 %}...{% endif %}
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p style="margin: 5px 0;">Aucune réservation confirmée pour les dates à venir.</p>
-    {% endif %}
-</div>
+        <!-- Affichage des erreurs de validation -->
+        {% if form.errors %}
+            <div class="alert alert-danger" style="color: red; margin: 1rem 0;">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <p class="mb-0">{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
 
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="{{ form.date_reservation.id_for_label }}">1. Choisissez une date</label>
-                        {{ form.date_reservation }}
-                        {% if form.date_reservation.errors %}<div class="form-errors">{{ form.date_reservation.errors }}</div>{% endif %}
-                    </div>
-                    <div class="form-group">
-                        <label for="{{ form.heure_debut.id_for_label }}">2. Choisissez une heure de début</label>
-                        {{ form.heure_debut }}
-                        {% if form.heure_debut.errors %}<div class="form-errors">{{ form.heure_debut.errors }}</div>{% endif %}
-                    </div>
-                    <div class="form-group">
-                        <label for="{{ form.duree_heures.id_for_label }}">3. Indiquez la durée (en heures)</label>
-                        {{ form.duree_heures }}
-                        {% if form.duree_heures.errors %}<div class="form-errors">{{ form.duree_heures.errors }}</div>{% endif %}
-                    </div>
-                    
-                    <div class="prix-display">
-                        Prix total estimé : <span id="prix-total-display">...</span> €
-                    </div>
-                    
-                    <button type="submit" class="btn-primary" style="width: 100%;">Lancer la demande de réservation</button>
-                </form>
+        <hr style="margin: 2rem 0;">
+
+        <h4>Disponibilité de la salle</h4>
+        <div class="availability-card">
+            {% if salle.photo %}
+                <img src="{{ salle.photo.url }}" alt="{{ salle.nom }}">
+            {% else %}
+                <img src="https://via.placeholder.com/60x60.png?text=Salle" alt="Image indisponible">
+            {% endif %}
+            <div>
+                <p>{{ salle.nom }}</p>
+                <!-- Ici, on mettra une logique plus avancée plus tard pour 'Disponible' ou 'Indisponible' -->
+                <p class="status-disponible">Disponible</p>
             </div>
         </div>
-    </div>
 
-    <script>
-        // Script pour le calcul du prix, autonome et robuste
-        const prixParHeureEl = document.getElementById('prix-par-heure-data');
-        const dureeInput = document.getElementById('id_duree_heures');
-        const prixTotalDisplay = document.getElementById('prix-total-display');
-
-        const prixParHeure = parseFloat(prixParHeureEl.dataset.prix);
-
-        function calculerEtAfficherTotal() {
-            const duree = parseInt(dureeInput.value) || 0;
-            const total = duree * prixParHeure;
-            prixTotalDisplay.textContent = total.toFixed(2);
-        }
-
-        // On écoute les changements sur le champ de durée
-        dureeInput.addEventListener('input', calculerEtAfficherTotal);
-
-        // On calcule le prix une première fois au chargement de la page
-        document.addEventListener('DOMContentLoaded', calculerEtAfficherTotal);
-    </script>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Réserver</button>
+    </form>
+</div>
 {% endblock %}

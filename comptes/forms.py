@@ -47,7 +47,6 @@ class EmailAuthenticationForm(AuthenticationForm):
         self.fields['username'].help_text = ''
 
     def clean(self):
-        # Le code ici est bien indenté
         email = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password')
 

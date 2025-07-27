@@ -1,0 +1,33 @@
+<!-- menu/templates/menu/menu_page.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Menu</h1>
+
+    <div class="menu-tabs">
+        {% for code, nom in categories %}
+            <a href="?categorie={{ code }}" 
+               class="{% if categorie_active == code %}active{% endif %}">
+                {{ nom }}
+            </a>
+        {% endfor %}
+    </div>
+
+    <div class="menu-grid">
+        {% for produit in produits %}
+            <div class="product-card">
+                {% if produit.photo %}
+                    <img src="{{ produit.photo.url }}" alt="{{ produit.nom }}">
+                {% else %}
+                    <div class="placeholder-image"></div>
+                {% endif %}
+                <div class="product-card-body">
+                    <h3>{{ produit.nom }}</h3>
+                    <p>{{ produit.description }}</p>
+                </div>
+            </div>
+        {% empty %}
+            <p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted-color);">Aucun article dans cette catégorie pour le moment.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

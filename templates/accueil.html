@@ -1,29 +1,47 @@
-<!-- templates/accueil.html (Version Corrigée) -->
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
+<div class="hero" style="background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)), url('{% static 'comptes/images/accueil_bg.jpg' %}');">
+    <h1>Bienvenue au Hybah Coffee House</h1>
+    <p>Découvrez nos délicieux cafés, pâtisseries et plus encore. Réservez votre table ou commandez en ligne pour une expérience inoubliable.</p>
 
-    <div class="hero-section">
-        <div class="hero-content">
-            {% if user.is_authenticated %}
-             <h1>Bienvenue {{ user.profile.prenom }} {{ user.profile.nom }} !</h1>
-            <p>Prêt à organiser votre prochain événement ?</p>
-            <!-- On affiche un message général, car le nom est déjà dans la nav -->
-            <h1>La Salle Parfaite pour Chaque Occasion</h1>
-            <p>Réservez vos salles et commandez vos gâteaux en quelques clics.</p>
-             {% else %}
-             <h1>Bienvenue chez HYBAH COFFEE HOUSE!</h1>
-                <p>Réservez vos salles et commandez vos gâteaux en quelques clics.</p>
+<div class="hero-actions">
+    {% if user.is_authenticated %}
+        <a href="{% url 'liste_gateaux' %}">
+            <button class="btn btn-primary">Commander un Gâteau</button>
+        </a>
+        <a href="{% url 'liste_salles' %}">
+            <button class="btn btn-secondary">Réserver une Salle</button>
+        </a>
 
+    {% else %}
+        <a href="{% url 'connexion' %}">
+            <button class="btn btn-primary">Commander un gateau</button>
+        </a>
+        
+        <a href="{% url 'connexion' %}">
+            <button class="btn btn-secondary">Réserver une salle</button>
+        </a>
 
-                <h1> HYBAH !!! Votre Maison</h1>
-             {% endif %}
+    {% endif %}
+</div>
+</div>
+
+<section class="services-section">
+    <h2>Nos services</h2>
+    <p>Profitez de nos différents services pour une expérience personnalisée.</p>
+    
+    <div class="services-grid">
+        {% for service in services %}
+        <div class="service-card">
+            {% if service.image %}
+                <img src="{{ service.image.url }}" alt="{{ service.titre }}">
+            {% endif %}
+            <h3>{{ service.titre }}</h3>
+            <p>{{ service.description }}</p>
         </div>
+        {% endfor %}
     </div>
-
-    <div style="padding: 40px 20px; text-align: center;">
-        <h2>Découvrez nos services</h2>
-        <p>Nous offrons des espaces élégants et des pâtisseries sur mesure pour rendre vos événements inoubliables.</p>
-    </div>
-
+</section>
 {% endblock %}

@@ -20,6 +20,8 @@ INSTALLED_APPS = [
     'salles',
     'reservations',
     'gateaux',
+    'menu',
+    'core',
 ]
 
 MIDDLEWARE = [

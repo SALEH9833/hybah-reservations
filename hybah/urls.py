@@ -5,6 +5,8 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from comptes import views as comptes_views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', comptes_views.page_accueil, name='accueil'),
@@ -12,6 +14,8 @@ urlpatterns = [
     path('comptes/', include('comptes.urls')),
     path('salles/', include('salles.urls')),
     path('gateaux/', include('gateaux.urls')),
+    path('menu/', include('menu.urls')),
+    path('', include('core.urls')),
 ]
 
 # Pour servir les images en développement

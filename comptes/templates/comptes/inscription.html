@@ -1,22 +1,49 @@
-<!-- comptes/templates/comptes/inscription.html -->
+<!-- comptes/templates/comptes/inscription.html (Nouveau Design) -->
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="auth-container">
-    <div class="auth-card">
+<div class="form-container">
+    <h2>Créez votre compte</h2>
+    <form method="post">
+        {% csrf_token %}
 
-        <h2>Créez votre compte</h2>
-        
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }} <!-- Pour l'inscription, as_p est suffisant -->
-            <button type="submit" class="btn-primary">S'inscrire</button>
-        </form>
-
-        <div class="auth-switch-link">
-            <p>Déjà un compte ? <a href="{% url 'connexion' %}">Connectez-vous.</a></p>
+        <!-- On affiche chaque champ manuellement pour un meilleur contrôle -->
+        <div class="form-group">
+            <label for="{{ form.nom.id_for_label }}">Nom de famille</label>
+            {{ form.nom }}
         </div>
+        <div class="form-group">
+            <label for="{{ form.prenom.id_for_label }}">Prénom</label>
+            {{ form.prenom }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.email.id_for_label }}">Adresse e-mail</label>
+            {{ form.email }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.telephone.id_for_label }}">Numéro de téléphone (Optionnel)</label>
+            {{ form.telephone }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.password1.id_for_label }}">Mot de passe</label>
+            {{ form.password1 }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.password2.id_for_label }}">Confirmation du mot de passe</label>
+            {{ form.password2 }}
+        </div>
+        
+        <!-- On affiche les erreurs du formulaire -->
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                Veuillez corriger les erreurs ci-dessus.
+            </div>
+        {% endif %}
 
-    </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Créer mon compte</button>
+    </form>
+    <p style="margin-top: 1.5rem; font-size: 0.875rem;">
+        Déjà un compte ? <a href="{% url 'connexion' %}">Connectez-vous.</a>
+    </p>
 </div>
 {% endblock %}
