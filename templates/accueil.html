@@ -1,25 +1,29 @@
-<!-- templates/accueil.html -->
+<!-- templates/accueil.html (Version Corrigée) -->
 {% extends 'base.html' %}
 
 {% block content %}
 
-<div class="hero-section">
-    <div class="hero-content">
-        {% if user.is_authenticated %}
-            <h1>Bienvenue, {{ user.username }} !</h1>
+    <div class="hero-section">
+        <div class="hero-content">
+            {% if user.is_authenticated %}
+             <h1>Bienvenue {{ user.profile.prenom }} {{ user.profile.nom }} !</h1>
             <p>Prêt à organiser votre prochain événement ?</p>
-        {% else %}
-            <h1>Bienvenue à HYBAH COFFEE HOUSE </h1>
-            <h2>La Salle Parfaite pour Chaque Occasion</h2>
-            <p>Réservez nos salles et commandez nos gâteaux en quelques clics.</p>
-        {% endif %}
-    </div>
-</div>
+            <!-- On affiche un message général, car le nom est déjà dans la nav -->
+            <h1>La Salle Parfaite pour Chaque Occasion</h1>
+            <p>Réservez vos salles et commandez vos gâteaux en quelques clics.</p>
+             {% else %}
+             <h1>Bienvenue chez HYBAH COFFEE HOUSE!</h1>
+                <p>Réservez vos salles et commandez vos gâteaux en quelques clics.</p>
 
-<!-- Vous pouvez ajouter plus de contenu ici, en dessous de l'image -->
-<div style="padding: 40px 20px; text-align: center;">
-    <h2>Découvrez nos services</h2>
-    <p>Nous offrons des espaces élégants et des pâtisseries sur mesure.</p>
-</div>
+
+                <h1> HYBAH !!! Votre Maison</h1>
+             {% endif %}
+        </div>
+    </div>
+
+    <div style="padding: 40px 20px; text-align: center;">
+        <h2>Découvrez nos services</h2>
+        <p>Nous offrons des espaces élégants et des pâtisseries sur mesure pour rendre vos événements inoubliables.</p>
+    </div>
 
 {% endblock %}

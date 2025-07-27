@@ -1,22 +1,40 @@
+<!-- salles/templates/salles/liste_salles.html (Version Corrigée avec Image) -->
 {% extends 'base.html' %}
 
 {% block content %}
     <h1>Découvrez nos salles disponibles</h1>
-    <div>
-        <strong>Filtrer par :</strong>
-        <a href="{% url 'liste_salles' %}">Toutes</a> |
-        <a href="{% url 'liste_salles' %}?categorie=H">Hommes</a> |
-        <a href="{% url 'liste_salles' %}?categorie=F">Femmes</a>
-    </div>
-    <hr>
     
-    <div class="card-container">
+    <div class="mb-3">
+        <strong>Filtrer :</strong>
+        <a href="{% url 'liste_salles' %}" class="btn btn-outline-secondary btn-sm">Toutes</a>
+        <a href="{% url 'liste_salles' %}?categorie=H" class="btn btn-outline-primary btn-sm">Hommes</a>
+        <a href="{% url 'liste_salles' %}?categorie=F" class="btn btn-outline-danger btn-sm">Femmes</a>
+    </div>
+    
+    <div class="row">
         {% for salle in salles %}
-            <div class="card">
-                <h2><a href="{% url 'detail_salle' salle.id %}">{{ salle.nom }}</a></h2>
-                <p><strong>Catégorie :</strong> {{ salle.get_categorie_display }}</p>
-                <p><strong>Capacité :</strong> {{ salle.capacite }} personnes</p>
-                <p><strong>Prix :</strong> {{ salle.prix_par_heure }} € / heure</p>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    
+                    <!-- ======================================== -->
+                    <!--     LE BLOC D'IMAGE AJOUTÉ EST ICI      -->
+                    <!-- ======================================== -->
+                    {% if salle.photo %}
+                        <a href="{% url 'detail_salle' salle.id %}">
+                           <!-- On utilise la classe 'card-img-top' de Bootstrap -->
+                           <img src="{{ salle.photo.url }}" class="card-img-top" alt="{{ salle.nom }}" style="height: 200px; object-fit: cover;">
+                        </a>
+                    {% endif %}
+                    
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{% url 'detail_salle' salle.id %}" class="text-dark text-decoration-none">{{ salle.nom }}</a></h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ salle.get_categorie_display }}</h6>
+                        <p class="card-text">{{ salle.description|truncatewords:15 }}</p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Capacité : {{ salle.capacite }} | {{ salle.prix_par_heure }} € / heure
+                    </div>
+                </div>
             </div>
         {% empty %}
             <p>Désolé, aucune salle n'est disponible pour le moment.</p>

@@ -3,24 +3,30 @@
 {% block content %}
     <h1>Commandez votre gâteau</h1>
     
-    <div class="card-container">
+    <div class="row">
         {% for gateau in gateaux %}
-            <div class="card">
-                <h2><a href="{% url 'detail_gateau' gateau.id %}">{{ gateau.nom }}</a></h2>
-                {% if gateau.photo %}
-                    <a href="{% url 'detail_gateau' gateau.id %}">
-                        <img src="{{ gateau.photo.url }}" alt="Photo de {{ gateau.nom }}">
-                    </a>
-                {% endif %}
-                <p><strong>Prix :</strong> {{ gateau.prix }} €</p>
-                <a href="{% url 'detail_gateau' gateau.id %}"><button style="width: 100%;">Choisir</button></a>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if gateau.photo %}
+                        <a href="{% url 'detail_gateau' gateau.id %}">
+                           <img src="{{ gateau.photo.url }}" class="card-img-top" alt="{{ gateau.nom }}" style="height: 200px; object-fit: cover;">
+                        </a>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{% url 'detail_gateau' gateau.id %}" class="text-dark text-decoration-none">{{ gateau.nom }}</a></h5>
+                        <p class="card-text">{{ gateau.description|truncatewords:15 }}</p>
+                    </div>
+                     <div class="card-footer text-muted">
+                        <strong>{{ gateau.prix }} €</strong>
+                        <a href="{% url 'detail_gateau' gateau.id %}" class="btn btn-dark btn-sm float-end">Choisir</a>
+                    </div>
+                </div>
             </div>
         {% empty %}
             <p>Désolé, aucun gâteau n'est disponible pour le moment.</p>
         {% endfor %}
     </div>
 {% endblock %}
-
 
 {% block panier_chatbot %}
     {% include 'partials/panier_chatbot.html' %}

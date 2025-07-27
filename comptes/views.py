@@ -1,16 +1,18 @@
-# comptes/views.py
+# comptes/views.py (Version Finale et Corrigée)
 
-from django.shortcuts import render, redirect # type: ignore
-from django.contrib.auth import login # type: ignore
-from django.contrib.auth.decorators import login_required # type: ignore
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm # type: ignore
-from django.urls import reverse_lazy # type: ignore
-from django.views import generic # type: ignore
-from reservations.models import Reservation # Important pour l'historique
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy
+from django.views import generic
+from django.http import JsonResponse
+from reservations.models import Reservation
+# On importe nos DEUX formulaires personnalisés
+from .forms import CustomUserCreationForm, EmailAuthenticationForm 
 
 # --- Vue pour l'inscription ---
 class InscriptionView(generic.CreateView):
-    form_class = UserCreationForm
+    form_class = CustomUserCreationForm
     success_url = reverse_lazy('connexion')
     template_name = 'comptes/inscription.html'
 
@@ -18,24 +20,35 @@ class InscriptionView(generic.CreateView):
 def page_accueil(request):
     return render(request, 'accueil.html')
 
-# --- Vue pour la connexion personnalisée ---
+# --- Vue pour la connexion (utilisant notre formulaire par e-mail) ---
 def page_connexion_personnalisee(request):
     if request.user.is_authenticated:
         return redirect('accueil')
+        
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
+        # CETTE LIGNE EST LA PLUS IMPORTANTE
+        # Elle doit utiliser EmailAuthenticationForm
+        form = EmailAuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
+            
+            if not request.POST.get('remember_me', None):
+                request.session.set_expiry(0)
+            else:
+                request.session.set_expiry(None)
+            
             if user.is_staff:
                 return redirect('/admin/')
             else:
                 return redirect('accueil')
     else:
-        form = AuthenticationForm()
+        # CETTE LIGNE AUSSI EST IMPORTANTE
+        form = EmailAuthenticationForm()
+        
     return render(request, 'comptes/connexion.html', {'form': form})
 
-# --- Vue pour l'historique des réservations ---
+# --- Vue pour l'historique ---
 @login_required
 def historique_reservations(request):
     reservations_utilisateur = Reservation.objects.filter(utilisateur=request.user).order_by('-horodatage_creation')
@@ -43,16 +56,22 @@ def historique_reservations(request):
         'reservations': reservations_utilisateur
     }
     return render(request, 'comptes/historique.html', context)
-def debug_static_css(request):
-    # On construit le chemin absolu vers le fichier style.css
-    file_path = os.path.join(settings.BASE_DIR, 'static', 'style.css') # type: ignore
+@login_required
+def supprimer_reservation(request, reservation_id):
+    # On s'assure que c'est une requête POST pour la sécurité
+    if request.method == 'POST':
+        try:
+            # On cherche la réservation à supprimer
+            # ET on s'assure qu'elle appartient bien à l'utilisateur connecté
+            # (pour l'empêcher de supprimer les réservations des autres)
+            reservation = Reservation.objects.get(pk=reservation_id, utilisateur=request.user)
+            
+            # On la supprime
+            reservation.delete()
+            
+            # On renvoie un message de succès
+            return JsonResponse({'status': 'succes', 'message': 'Réservation supprimée.'})
+        except Reservation.DoesNotExist:
+            return JsonResponse({'status': 'erreur', 'message': 'Réservation non trouvée ou vous n\'avez pas la permission.'})
     
-    try:
-        # On essaie d'ouvrir et de lire le fichier
-        with open(file_path, 'r', encoding='utf-8') as f:
-            content = f.read()
-        # On renvoie le contenu avec le bon type MIME pour le CSS
-        return HttpResponse(content, content_type='text/css') # type: ignore
-    except FileNotFoundError:
-        # Si le fichier n'est pas trouvé, on renvoie une erreur 404 claire
-        return HttpResponse("Le fichier style.css n'a pas été trouvé à l'emplacement attendu.", status=404) # type: ignore
+    return JsonResponse({'status': 'erreur', 'message': 'Méthode non autorisée.'})

@@ -1,0 +1,29 @@
+<!-- templates/base_test.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Test CSS</title>
+    <style>
+        body {
+            background-color: green !important;
+        }
+        .navbar {
+            background-color: blue !important;
+            color: white;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        Ceci est ma barre de navigation.
+    </nav>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+</html>

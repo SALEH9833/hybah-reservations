@@ -1,25 +1,27 @@
-<!-- templates/base.html (Version Finale et Propre avec Blocs) -->
-{% load static %}
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Hybah Réservations</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-   <link rel="stylesheet" href="{% static 'comptes/style.css' %}">
-    <style>
-        /* static/style.css */
+     /* static/style.css */
 
 body {
-    font-family: /* ... */;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     margin: 0;
-    /* On remet l'image de fond (avec la méthode Base64 qui fonctionnait) */
-    background-image: url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...); /* Mettez votre longue chaîne Base64 ici */
+    
+    /* On définit une couleur de fond de secours, au cas où l'image ne charge pas */
+    background-color: #f4f4f4;
+    
+    /* On applique notre image de fond */
+    background-image: url("{% static 'comptes/images/global_bg.jpg' %}");
+    
+    /* On s'assure que l'image couvre tout l'arrière-plan sans se déformer */
     background-size: cover;
+    
+    /* On fixe l'image pour qu'elle ne défile pas avec le contenu (effet "parallax") */
     background-attachment: fixed;
+    
+    /* On centre l'image */
     background-position: center;
+    
     color: #333;
 }
+
 .container {
     padding: 20px;
     max-width: 1200px;
@@ -81,24 +83,14 @@ button:hover {
     gap: 20px;
 }
 
-/* Dans la section CARTES (Salles & Gâteaux) */
 .card {
-    /* On utilise rgba pour un fond blanc avec 85% d'opacité */
-    background-color: rgba(255, 255, 255, 0.85); 
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 16px;
+    background-color: white;
     width: 300px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     transition: transform 0.2s, box-shadow 0.2s;
-    
-    /* On ajoute un effet de "verre dépoli" pour la lisibilité */
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-}
-
-.card h2 a {
-    color: #333; /* On garde le texte en noir, car le fond est clair */
 }
 
 .card:hover {
@@ -124,9 +116,7 @@ button:hover {
 }
 
 form {
-    background-color: rgba(255, 255, 255, 0.9); /* 90% d'opacité */
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    background-color: white;
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -134,13 +124,6 @@ form {
     border: 1px solid #ddd;
 }
 
-/* On peut rendre les cartes de connexion/inscription encore plus transparentes */
-.auth-card {
-    background-color: rgba(255, 255, 255, 0.8); /* 80% d'opacité */
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    /* ... (le reste des styles de .auth-card) ... */
-}
 form p {
     margin-bottom: 15px;
     text-align: left;
@@ -377,6 +360,8 @@ hero-section {
 }
 
 /* Le pseudo-élément qui contient l'image de fond */
+/* Dans comptes/static/comptes/style.css */
+
 .hero-section::before {
     content: "";
     position: absolute;
@@ -384,13 +369,15 @@ hero-section {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url("{% static 'images/accueil_bg.jpg' %}");
+    
+    /* CHEMIN RELATIF DEPUIS LE FICHIER CSS */
+    /* Il doit remonter d'un dossier (..) pour sortir de 'comptes/', puis entrer dans 'images/' */
+    background-image: url("images/accueil_bg.jpg"); /* Correction : pas besoin de remonter, ils sont au même niveau */
+    
     background-size: cover;
     background-position: center;
-    z-index: -1; /* Place l'image derrière le contenu */
-    
-    /* C'est ici qu'on crée l'effet de transparence/assombrissement */
-    filter: brightness(0.6); 
+    z-index: -1;
+    filter: brightness(0.6);
 }
 
 .hero-content h1 {
@@ -411,132 +398,3 @@ hero-section {
     background: none;
     box-shadow: none;
 }
-.btn-danger {
-    background-color: #dc3545; /* Rouge */
-}
-.btn-danger:hover {
-    background-color: #c82333;
-}
-@media (max-width: 768px) {
-    
-    /* On augmente la taille de la police de base pour tout le site sur mobile */
-    html {
-        font-size: 18px; /* Au lieu de 16px par défaut, rend tout un peu plus grand */
-    }
-
-    .container {
-        padding: 10px; /* Moins de marge sur les côtés */
-    }
-
-    /* On s'assure que la barre de nav est lisible */
-    .navbar-brand {
-        font-size: 1.2rem; /* 'rem' s'adapte à la taille de base de html */
-    }
-    .nav-link {
-        font-size: 1rem;
-    }
-
-    /* Pour la page de connexion, on retire les marges pour qu'elle prenne plus de place */
-    .auth-container {
-        padding: 10px;
-        min-height: 70vh;
-    }
-
-    .auth-card {
-        padding: 20px;
-    }
-
-    .auth-card h2 {
-        font-size: 1.5rem;
-    }
-
-    /* On augmente la taille de la police dans les champs de saisie */
-    input[type="text"],
-    input[type="password"],
-    input[type="date"],
-    input[type="number"],
-    input[type="email"],
-    .reservation-form select {
-        font-size: 1rem;
-        padding: 15px; /* On augmente aussi le padding pour que ce soit plus facile à toucher */
-    }
-    
-    .hero-content h1 {
-        font-size: 2.2rem; /* 36px est un peu petit, on augmente */
-    }
-
-    .hero-content p {
-        font-size: 1.1rem;
-    }
-}
-
-    </style>
-</head>
-<body>
-
-   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'accueil' %}">Hybah</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            {% if user.is_authenticated %}
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'liste_salles' %}">Salles</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'liste_gateaux' %}">Gâteaux</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav ms-auto">
-                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'historique' %}">Mes Réservations</a>
-                    </li>
-                
-                    <li class="nav-item">
-                        <form action="{% url 'deconnexion' %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-dark">Déconnexion</button>
-                        </form>
-                    </li>
-                </ul>
-            {% else %}
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'connexion' %}">Connexion</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'inscription' %}">Inscription</a>
-                    </li>
-                </ul>
-            {% endif %}
-        </div>
-    </div>
-</nav>
-
-    <main class="container">
-         {% if messages %}
-            <div class="messages">
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-                {% endfor %}
-            </div>
-        {% endif %}
-        
-        {% block content %}{% endblock %}
-    </main>
-
-    
-    {% block panier_chatbot %}{% endblock %}
-
-    <script>
-        function togglePanier() {
-            const panier = document.getElementById('panier-chatbot');
-            if (panier) { panier.classList.toggle('panier-visible');panier.classList.toggle('panier-hidden'); }
-        }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
-</html>

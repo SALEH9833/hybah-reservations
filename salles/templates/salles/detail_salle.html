@@ -70,6 +70,9 @@
         
         <!-- Colonne de gauche : Informations sur la salle -->
         <div class="info-col">
+             {% if salle.photo %}
+                <img src="{{ salle.photo.url }}" alt="Photo de {{ salle.nom }}" style="width: 100%; border-radius: 8px; margin-bottom: 20px;">
+            {% endif %}
             <h1>{{ salle.nom }}</h1>
             <p><strong>Catégorie :</strong> {{ salle.get_categorie_display }}</p>
             <p><strong>Description :</strong> {{ salle.description }}</p>

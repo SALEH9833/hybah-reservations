@@ -1,17 +1,25 @@
-# hybah/settings.py
+# hybah/settings.py (Version Finale et Propre)
 
 import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-votre-cle-locale-secrete')
-DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
-ALLOWED_HOSTS = ['saleh9833.pythonanywhere.com', '127.0.0.1', 'localhost']
+SECRET_KEY = 'mettez-ici-une-nouvelle-cle-secrete-pour-votre-nouveau-projet'
+DEBUG = True
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'saleh9833.pythonanywhere.com']
 
 INSTALLED_APPS = [
-    'django.contrib.admin', 'django.contrib.auth', 'django.contrib.contenttypes',
-    'django.contrib.sessions', 'django.contrib.messages', 'django.contrib.staticfiles',
-    'comptes', 'salles', 'reservations', 'gateaux',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    # Mes applications
+    'comptes',
+    'salles',
+    'reservations',
+    'gateaux',
 ]
 
 MIDDLEWARE = [
@@ -26,24 +34,40 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'hybah.urls'
-TEMPLATES = [{'BACKEND': 'django.template.backends.django.DjangoTemplates', 'DIRS': [BASE_DIR / 'templates'], 'APP_DIRS': True, 'OPTIONS': {'context_processors': ['django.template.context_processors.debug', 'django.template.context_processors.request', 'django.contrib.auth.context_processors.auth', 'django.contrib.messages.context_processors.messages']}}]
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
 WSGI_APPLICATION = 'hybah.wsgi.application'
 
-DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DIR / 'db.sqlite3'}}
+DATABASES = { 'default': { 'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DIR / 'db.sqlite3' } }
 
 LANGUAGE_CODE = 'fr-fr'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# --- Configuration des Fichiers ---
+# --- Fichiers Statiques & Média ---
 STATIC_URL = 'static/'
-# On utilise la méthode des statiques par application, donc STATICFILES_DIRS est inutile.
-STATIC_ROOT = BASE_DIR / 'static_root_production' 
-
+STATIC_ROOT = BASE_DIR / 'static_root_production'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# --- Divers ---
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'

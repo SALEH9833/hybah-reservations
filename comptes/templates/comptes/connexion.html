@@ -4,16 +4,11 @@
 {% block content %}
 <div class="auth-container">
     <div class="auth-card">
-        
-        <!-- (Optionnel) Vous pouvez ajouter votre logo ici -->
-        <!-- <img src="URL_DE_VOTRE_LOGO" alt="Logo Hybah" width="150"> -->
-
         <h2>Connexion</h2>
 
         <form method="post">
             {% csrf_token %}
             
-            <!-- On affiche les erreurs générales du formulaire en haut -->
             {% if form.non_field_errors %}
                 <div style="color: red; margin-bottom: 15px;">
                     {% for error in form.non_field_errors %}
@@ -22,14 +17,28 @@
                 </div>
             {% endif %}
 
-            <!-- On affiche les champs du formulaire -->
-            {{ form.username }}
-            {{ form.password }}
-            
+            <!-- On affiche le champ "username" (qui est notre champ e-mail) -->
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Adresse e-mail</label>
+                {{ form.username }}
+            </div>
+
+            <!-- On affiche le champ mot de passe -->
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}">Mot de passe</label>
+                {{ form.password }}
+            </div>
+
+            <div class="form-group-inline">
+                <input type="checkbox" name="remember_me" id="id_remember_me">
+                <label for="id_remember_me">Se souvenir de moi</label>
+            </div>
+
             <button type="submit" class="btn-primary">Se connecter</button>
         </form>
 
         <div class="auth-switch-link">
+            <p><a href="{% url 'password_reset' %}">Mot de passe oublié ?</a></p>
             <p>Pas de compte ? <a href="{% url 'inscription' %}">Inscrivez-vous.</a></p>
         </div>
     </div>
